@@ -1,4 +1,6 @@
 
+import sys
+
 from student import Student
 from grade import compute_grade
 from data.database import create_table, save_record, load_records, delete_record, record_exists
@@ -126,7 +128,20 @@ def run():
 
 # Running the application
 if __name__ == "__main__":
-    run()
+    if len(sys.argv) > 1 and sys.argv[1] == "--cli":
+        run()
+    else:
+        try:
+            from gui import SRMSApp
+        except ModuleNotFoundError as exc:
+            if exc.name == "customtkinter":
+                print("customtkinter is not installed. Run 'python main.py --cli' or install it with 'pip install customtkinter'.")
+                run()
+            else:
+                raise
+        else:
+            app = SRMSApp()
+            app.mainloop()
 
 
 # # TEMPORARY TEST
